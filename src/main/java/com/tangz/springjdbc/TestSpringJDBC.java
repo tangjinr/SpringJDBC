@@ -19,11 +19,19 @@ public class TestSpringJDBC {
     public static void main(String[] args) {
         ApplicationContext context = new ClassPathXmlApplicationContext("application-context.xml");
 
-        JdbcTemplateDao dao = context.getBean("jdbcTemplateDao" , JdbcTemplateDao.class);
+        AccountDao dao = context.getBean("accountDao", AccountDao.class);
 
-        List<User> userList = dao.getUserList();
-        for (User user: userList) {
-            System.out.println(user.getId() + ": " +user.getFirstName() + " " + user.getLastName());
+        dao.resetMoney();
+
+        try {
+            dao.transferMoney("LiLei", "Hanmeimei", 521);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        List<Account> accountList = dao.accountList();
+        for (Account account : accountList) {
+            System.out.println(account.getUser() + ": " + account.getBalance());
         }
 
         ((ConfigurableApplicationContext) context).close();
